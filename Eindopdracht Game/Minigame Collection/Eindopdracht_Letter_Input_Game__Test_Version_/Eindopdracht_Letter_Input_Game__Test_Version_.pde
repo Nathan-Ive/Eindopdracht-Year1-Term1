@@ -1,6 +1,6 @@
 //Rules to follow
-  // Every drawn object has a fill and strokeWeight, any other seperately decided variables as well.
-  // Everything should be decided based on a handful of timers, either starting depending on input or events.
+// Every drawn object has a fill and strokeWeight, any other seperately decided variables as well.
+// Everything should be decided based on a handful of timers, either starting depending on input or events.
 
 //The booleans for input detection, and which input is right or wrong in the context of the game
 boolean pressedKey = false;
@@ -13,9 +13,6 @@ int correctInputCounter = 0;
 int incorrectInputCounter = 0;
 int correctInputCounterLIMIT = requestedPoints;
 int correctInputCounterExceed = 0;
-//int totalScore;
-//String[] finalGrading = {"Bad", "Good", "Great", "Amazing"};
-//String Divider = "|";
 
 
 ///All the values relating to the cooldown or timeloss based on bad inputs
@@ -39,8 +36,8 @@ int limitLetr5 = timeLimit;
 //The set values of the size for the circle made around the letter
 int basicCircleWidth = 75;
 int basicCircleHeight = 75;
-int timerCircleStartingWidth = 150;
-int timerCircleStartingHeight = 150;
+int timerCircleStartingWidth = 120;
+int timerCircleStartingHeight = 120;
 
 
 void setup() {
@@ -59,7 +56,6 @@ Letters Letters3 = new Letters ();
 Letters Letters4 = new Letters ();
 Letters Letters5 = new Letters ();
 
-
 CircleTimer CircleTimer1 = new CircleTimer (Letters1.letterScreenLocationX[Letters1.randomValueCoordsX], Letters1.letterScreenLocationY[Letters1.randomValueCoordsY], timerCircleStartingWidth, timerCircleStartingHeight);
 CircleTimer CircleTimer2 = new CircleTimer (Letters2.letterScreenLocationX[Letters2.randomValueCoordsX], Letters2.letterScreenLocationY[Letters2.randomValueCoordsY], timerCircleStartingWidth, timerCircleStartingHeight);
 CircleTimer CircleTimer3 = new CircleTimer (Letters3.letterScreenLocationX[Letters3.randomValueCoordsX], Letters3.letterScreenLocationY[Letters3.randomValueCoordsY], timerCircleStartingWidth, timerCircleStartingHeight);
@@ -75,11 +71,10 @@ void draw() {
 
   //temporary input counter
   fill(0);
-  text(correctInputCounter, width - 50, height - 100);
-  text(incorrectInputCounter, width - 50, height - 300);
-  text(correctInputCounterExceed, width - 50, height - 200);
-  text(time, 20, 50);
-  text(cooldownTime, 120, 50);
+  if (time < 10){
+  text("Time: " + time, width/2 - 65, height/2 - 85);
+}
+  //text(cooldownTime, 120, 50);
 
   //Time limit is 10 seconds
   if (time < timeLimit) {
@@ -106,4 +101,8 @@ void draw() {
   }
 
 
+  if (time >= 10) {
+    ResultScreen ResultScreen1 = new ResultScreen ();
+    ResultScreen1.showResult();    
+  }
 }

@@ -99,3 +99,40 @@ class CircleTimer {
     }
   }
 }
+
+
+
+class ResultScreen {
+  int totalScore;
+  String[] finalGrading = {"Bad", "Good", "Great", "Amazing"};
+  String divider = "|";
+
+
+  void showResult() {
+    if (time >= 10) {
+      totalScore = correctInputCounterExceed - incorrectInputCounter;
+
+      if (totalScore >= 0) {
+        if (totalScore < 10) {
+          text(totalScore, width/2 - 25, height/2 - 80);
+        } else if (totalScore > 10 && totalScore <= 50) {
+          text(totalScore, width/2 - 50, height/2 - 80);
+        } else if (totalScore > requestedPoints) {
+          text(requestedPoints, width/2 - 50, height/2 - 80);
+        }
+        text(divider, width/2 + 5, height/2 - 80);
+        text(requestedPoints, width/2 + 30, height/2 - 80);
+      }
+
+      if (correctInputCounterExceed - incorrectInputCounter < requestedPoints / 2) {
+        text(finalGrading[0], width/2 - 35, height/2 + 80);
+      } else if (correctInputCounterExceed - incorrectInputCounter >= requestedPoints / 2 && correctInputCounterExceed - incorrectInputCounter < requestedPoints) {
+        text(finalGrading[1], width/2 - 40, height/2 + 80);
+      } else if (correctInputCounterExceed - incorrectInputCounter >= requestedPoints && correctInputCounterExceed - incorrectInputCounter < requestedPoints + (requestedPoints/2)) {
+        text(finalGrading[2], width/2 - 50, height/2 + 80);
+      } else if (correctInputCounterExceed - incorrectInputCounter >= requestedPoints + (requestedPoints/2)) {
+        text(finalGrading[3], width/2 - 80, height/2 + 80);
+      }
+    }
+  }
+}
