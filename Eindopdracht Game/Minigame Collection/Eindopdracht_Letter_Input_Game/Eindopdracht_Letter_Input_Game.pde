@@ -1,169 +1,108 @@
-//The boolean checking whether or not the key is currently being pressed or not
+//Rules to follow
+// Every drawn object has a fill and strokeWeight, any other seperately decided variables as well.
+// Everything should be decided based on a handful of timers, either starting depending on input or events.
+
+//The booleans for input detection, and which input is right or wrong in the context of the game
 boolean pressedKey = false;
-
-//The intiger highlighting the amount of points required to win
-int requestedPoints = 50;
-
-//the booleans checking whether or not the player pressed the right or wrong inputs
 boolean correctInput = false;
 boolean incorrectInput = false;
 
-//The intigers that tally how many correct and incorrect inputs were done. Necessary for the final point tally
+//The points and intigers that tally how many correct and incorrect inputs were done. Necessary for the final point tally.
+int requestedPoints = 50;
 int correctInputCounter = 0;
 int incorrectInputCounter = 0;
 int correctInputCounterLIMIT = requestedPoints;
 int correctInputCounterExceed = 0;
 
-//All the values relating to time, the time limit, the cooldown or timeloss based on bad inputs, and how long the given letter stays on screen
+
+///All the values relating to the cooldown or timeloss based on bad inputs
 float incorrectInputCooldownTime = 1;
-float timeLimit = 12;
-float letterTimer = 2;
+float universalTime = millis();
+float cooldownTime = 0;
+boolean incorrectInputCooldownActive = false;
+
+//The input timers and letter timers work on the same rules of counting down instead of up in the way the timer does. When I find out how that works, I should be able to get my switch case to work.
+//The equation I want is (millis() % x) / 1000, but for counting down instead of up. I don't know how to reverse the counting order of the millis function yet, or how to make my own timer without the use of millis.
+int timeLimit = 10;
 int time = 0;
 
+int letterTimer = 2;
+int limitLetr1 = 3;
+int limitLetr2 = limitLetr1 + letterTimer;
+int limitLetr3 = limitLetr2 + letterTimer;
+int limitLetr4 = limitLetr3 + letterTimer;
+int limitLetr5 = timeLimit;
 
-char[] lettersInput = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-char[] lettersInputCap = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-int randomValue = (int)random(lettersInput.length);
-
-float[] letterScreenLocationX = new float[1];
-float[] letterScreenLocationY = new float[1];
-int randomValueCoordsX = (int)random(letterScreenLocationX.length);
-int randomValueCoordsY =(int)random(letterScreenLocationY.length);
-
+//The set values of the size for the circle made around the letter
+int basicCircleWidth = 75;
+int basicCircleHeight = 75;
+int timerCircleStartingWidth = 120;
+int timerCircleStartingHeight = 120;
 
 
 void setup() {
   size(1024, 768);
 
-  letterScreenLocationX[0] = width/2;
-
-  letterScreenLocationY[0] = height/2;
-
   frameRate(60);
 }
+
+//I tested some things, and this does create 5 instances of letters contained within a circle.
+//That's good, but they have to appear one after the other instead of all at once.
+//They're also all the same letter, rather than all being different ones.
+
+Letters Letters1 = new Letters ();
+Letters Letters2 = new Letters ();
+Letters Letters3 = new Letters ();
+Letters Letters4 = new Letters ();
+Letters Letters5 = new Letters ();
+
+CircleTimer CircleTimer1 = new CircleTimer (Letters1.letterScreenLocationX[Letters1.randomValueCoordsX], Letters1.letterScreenLocationY[Letters1.randomValueCoordsY], timerCircleStartingWidth, timerCircleStartingHeight);
+CircleTimer CircleTimer2 = new CircleTimer (Letters2.letterScreenLocationX[Letters2.randomValueCoordsX], Letters2.letterScreenLocationY[Letters2.randomValueCoordsY], timerCircleStartingWidth, timerCircleStartingHeight);
+CircleTimer CircleTimer3 = new CircleTimer (Letters3.letterScreenLocationX[Letters3.randomValueCoordsX], Letters3.letterScreenLocationY[Letters3.randomValueCoordsY], timerCircleStartingWidth, timerCircleStartingHeight);
+CircleTimer CircleTimer4 = new CircleTimer (Letters4.letterScreenLocationX[Letters4.randomValueCoordsX], Letters4.letterScreenLocationY[Letters4.randomValueCoordsY], timerCircleStartingWidth, timerCircleStartingHeight);
+CircleTimer CircleTimer5 = new CircleTimer (Letters5.letterScreenLocationX[Letters5.randomValueCoordsX], Letters5.letterScreenLocationY[Letters5.randomValueCoordsY], timerCircleStartingWidth, timerCircleStartingHeight);
+
 
 
 void draw() {
   background(255);
   //Needed code Notes
   //Text code to draw the letters or words that will appear, showing what the player needs to press
-  Letters Letters1 = new Letters (letterScreenLocationX[randomValueCoordsX], letterScreenLocationY[randomValueCoordsY]);
-  Letters1.showLetter();
-
-
-
 
   //temporary input counter
   fill(0);
-  text(correctInputCounter, width - 50, height - 100);
-  text(incorrectInputCounter, width - 50, height - 300);
-  text(correctInputCounterExceed, width - 50, height - 200);
-  text(time, 20, 50);
+  if (time < 10){
+  text("Time: " + time, width/2 - 65, height/2 - 85);
+}
+  //text(cooldownTime, 120, 50);
 
   //Time limit is 10 seconds
   if (time < timeLimit) {
     time = (millis() / 1000);
   }
 
-  //
-
-  //Ellipse code to generate the circle the letters/text will appear within
-  //Another circle to show how much time you have left to press it
-  //A thick line at the bottom that depletes from left to right to show how much time is left for the mini-game
-  //Code that places each letter in a random area of the screen
-  //Code that draws and keeps track of the required score and your score
-  //Code that calculates your percentage and grade once the time is up
-  ///Afterthought: Code that ends the game once the time is up
-  ///Afterthought: Code that lets you restart the game by pressing a button on screen or on the keyboard
-  ///Afterthought:
-}
-
-
-
-
-//The class that represents the letters that appear on screen
-class Letters {
-  float xLocation;
-  float yLocation;
-
-  Letters(float xLocation, float yLocation) {
-    this.xLocation = xLocation;
-    this.yLocation = yLocation;
+  //I think this would be nicer as a switch case, but this is the only version of this that works, so I'll leave it this way for now.
+  //This code switches the letter that's shown for every couple of seconds that pass.
+  if (time >= 0 && time < limitLetr1) {
+    CircleTimer1.showCircleTimer();
+    Letters1.showLetter();
+  } else if (time >= limitLetr1 && time < limitLetr2) {
+    CircleTimer2.showCircleTimer();
+    Letters2.showLetter();
+  } else if (time >= limitLetr2 && time < limitLetr3) {
+    CircleTimer3.showCircleTimer();
+    Letters3.showLetter();
+  } else if (time >= limitLetr3 && time < limitLetr4) {
+    CircleTimer4.showCircleTimer();
+    Letters4.showLetter();
+  } else if (time >= limitLetr4 && time <= limitLetr5) {
+    CircleTimer5.showCircleTimer();
+    Letters5.showLetter();
   }
 
 
-  void showLetter() {
-    //Code that draws the shape displaying around the current letter
-    fill(255);
-    ellipse(xLocation + 10, yLocation - 15, 75, 75);
-
-    //Code that draws the letter for the player to push, and the color it shows depending on if the input is right or wrong.
-    fill(0);
-    if (correctInput == true && incorrectInput == false) {
-      fill(0, 255, 0);
-    } else if (incorrectInput == true && correctInput == false) {
-      fill(255, 0, 0);
-    }
-    textSize(50);
-    text(lettersInputCap[randomValue], xLocation, yLocation);
+  if (time >= 10) {
+    ResultScreen ResultScreen1 = new ResultScreen ();
+    ResultScreen1.showResult();    
   }
 }
-
-
-
-//The code that checks if a key was pressed, what key was pressed and whether or not that key was the right or wrong key
-void keyTyped() {
-
-  if (!pressedKey) {
-    if (key == lettersInput[randomValue] || key == lettersInputCap[randomValue]) {
-      correctInput = true;
-      incorrectInput = false;
-
-
-      if (correctInputCounter < correctInputCounterLIMIT) {
-        correctInputCounter++;
-      }
-      correctInputCounterExceed++;
-    } else if (key != lettersInput[randomValue] || key != lettersInputCap[randomValue]) {
-      correctInput = false;
-      incorrectInput = true;
-      incorrectInputCounter++;
-    }
-
-    if (correctInput && !incorrectInput) {
-      println("pressed " + key);
-    } else if (!correctInput && incorrectInput) {
-      println("Wrong Button");
-    }
-
-    pressedKey = true;
-  }
-}
-
-void keyReleased() {
-  if (pressedKey) {
-    pressedKey = false;
-  }
-  correctInput = false;
-  incorrectInput = false;
-}
-
-
-
-
-
-
-
-
-//This code is to check wether or not the input given was wrong or right.
-//(This should probably be incorperated into the code that checks whenever a key is pressed rather than be its own seperate code)
-///void inputCheck(){
-///if(){
-///correctInput = true;
-///incorrectInput = false;
-///}
-///if(){
-///correctInput = false;
-///incorrectInput = true;
-///}
-///}
