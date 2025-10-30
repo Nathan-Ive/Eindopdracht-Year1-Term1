@@ -109,7 +109,7 @@ class ResultScreen {
 
 
   void showResult() {
-    if (time >= 10) {
+    if (time >= timeLimit) {
       totalScore = correctInputCounterExceed - incorrectInputCounter;
 
       if (totalScore >= 0) {

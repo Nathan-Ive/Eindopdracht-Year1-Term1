@@ -23,7 +23,7 @@ boolean incorrectInputCooldownActive = false;
 
 //The input timers and letter timers work on the same rules of counting down instead of up in the way the timer does. When I find out how that works, I should be able to get my switch case to work.
 //The equation I want is (millis() % x) / 1000, but for counting down instead of up. I don't know how to reverse the counting order of the millis function yet, or how to make my own timer without the use of millis.
-int timeLimit = 10;
+int timeLimit = 11;
 int time = 0;
 
 int letterTimer = 2;
@@ -71,7 +71,7 @@ void draw() {
 
   //temporary input counter
   fill(0);
-  if (time < 10){
+  if (time < timeLimit){
   text("Time: " + time, width/2 - 65, height/2 - 85);
 }
   //text(cooldownTime, 120, 50);
